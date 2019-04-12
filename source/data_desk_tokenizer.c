@@ -167,6 +167,10 @@ GetNextTokenFromBuffer(Tokenizer *tokenizer)
                         if(buffer[j] == '\n')
                         {
                             ++tokenizer->line;
+                        }
+                        
+                        if(buffer[j] <= 32)
+                        {
                             break;
                         }
                     }

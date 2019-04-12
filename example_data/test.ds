@@ -1,10 +1,9 @@
-@Printable;
+@Printable
 struct TestStruct
 {
     a : i32;
     b : f32;
     c : char;
     
-    @NoPrint;
-    d: f32;
+    @NoPrint d: *f32[256];
 }
