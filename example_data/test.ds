@@ -1,9 +1,29 @@
+// NOTE: This format allows things to be tagged with @'s, which
+// are to be immediately followed by strings. These tags terminate
+// on whitespace. These are used to annotate structures. These tags
+// can be introspected upon by custom code, and are included in
+// parse information. The following tag marks the struct following it
+// as "Printable", which makes the example custom layer generate a
+// print function for it.
 @Printable
+
+// NOTE: Structs work similarly to how they do in C. It's just a
+// package of data. A struct contains declarations which outline
+// the format of the data structure. The format for declarations
+// differs from C in that it has the following pattern:
+// <identifier> : <type>. Array specifiers are not an attribute of
+// a declaration, but rather of the type, so to declare an array
+// of i32's(32-bit integers), you'd do: array : i32[5];. To add
+// a layer of indirection to make something a pointer, prefix the
+// type with a number of *'s, e.g.: array : *i32[5];.
 struct TestStruct
 {
     a : i32;
     b : f32;
     c : char;
     
-    @NoPrint d: *f32[256];
+    // NOTE: Individual declarations can also be tagged. The following
+    // tag, NoPrint, signifies to the example custom layer that this
+    // member is not to be included in the printing function.
+    @NoPrint d: *f32[16];
 }
