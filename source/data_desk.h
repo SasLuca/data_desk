@@ -1,6 +1,10 @@
 #ifndef DATA_DESK_H_INCLUDED_
 #define DATA_DESK_H_INCLUDED_
 
+#ifndef DATA_DESK_NO_CRT
+#include <stdio.h>
+#endif
+
 typedef struct DataDeskASTNode DataDeskASTNode;
 
 typedef struct DataDeskStruct
@@ -107,6 +111,10 @@ int DataDeskDeclarationHasTag(DataDeskDeclaration declaration_info, char *tag);
 int DataDeskDeclarationIsType(DataDeskASTNode *root, char *type);
 int DataDeskStructMemberIsType(DataDeskASTNode *root, char *type);
 
+#ifndef DATA_DESK_NO_CRT
+void DataDeskFWriteStructAsC(FILE *file, DataDeskStruct struct_info);
+#endif
+
 int
 DataDeskTagHasSubString(char *tag, char *substring)
 {
@@ -203,5 +211,101 @@ DataDeskStructMemberIsType(DataDeskASTNode *root, char *type)
 {
     return DataDeskDeclarationIsType(root, type);
 }
+
+#ifndef DATA_DESK_NO_CRT
+void
+DataDeskFWriteASTFromRootAsC(FILE *file, DataDeskASTNode *root, int follow_next)
+{
+    if(root)
+    {
+        switch(root->type)
+        {
+            case DATA_DESK_AST_NODE_TYPE_identifier:
+            case DATA_DESK_AST_NODE_TYPE_numeric_constant:
+            case DATA_DESK_AST_NODE_TYPE_string_constant:
+            case DATA_DESK_AST_NODE_TYPE_char_constant:
+            {
+                fprintf(file, "%s", root->string);
+                break;
+            }
+            
+            case DATA_DESK_AST_NODE_TYPE_binary_operator:
+            {
+                DataDeskFWriteASTFromRootAsC(file, root->binary_operator.left, 0);
+                char *binary_operator_string = "";
+                
+                switch(root->binary_operator.type)
+                {
+                    case DATA_DESK_BINARY_OPERATOR_TYPE_add: { binary_operator_string = "+"; break; }
+                    case DATA_DESK_BINARY_OPERATOR_TYPE_subtract: { binary_operator_string = "-"; break; }
+                    case DATA_DESK_BINARY_OPERATOR_TYPE_multiply: { binary_operator_string = "*"; break; }
+                    case DATA_DESK_BINARY_OPERATOR_TYPE_divide: { binary_operator_string = "/"; break; }
+                    default: break;
+                }
+                
+                fprintf(file, "%s", binary_operator_string);
+                DataDeskFWriteASTFromRootAsC(file, root->binary_operator.right, 0);
+                
+                break;
+            }
+            
+            case DATA_DESK_AST_NODE_TYPE_struct_declaration:
+            {
+                fprintf(file, "typedef struct %s\n{\n", root->string);
+                for(DataDeskASTNode *member = root->struct_declaration.first_member;
+                    member;
+                    member = member->next)
+                {
+                    DataDeskFWriteASTFromRootAsC(file, member, 0);
+                    fprintf(file, ";\n");
+                }
+                fprintf(file, "}\n%s;\n\n", root->string);
+                break;
+            }
+            
+            case DATA_DESK_AST_NODE_TYPE_declaration:
+            {
+                DataDeskFWriteASTFromRootAsC(file, root->declaration.type, 0);
+                fprintf(file, "%s", root->string);
+                
+                for(DataDeskASTNode *array = root->declaration.type->type_usage.first_array_size_expression;
+                    array;
+                    array = array->next)
+                {
+                    fprintf(file, "[");
+                    DataDeskFWriteASTFromRootAsC(file, array, 0);
+                    fprintf(file, "]");
+                }
+                
+                break;
+            }
+            
+            case DATA_DESK_AST_NODE_TYPE_type_usage:
+            {
+                fprintf(file, "%s ", root->string);
+                for(int i = 0; i < root->type_usage.pointer_count; ++i)
+                {
+                    fprintf(file, "*");
+                }
+                
+                break;
+            }
+            
+            default: break;
+        }
+        
+        if(root->next && follow_next)
+        {
+            DataDeskFWriteASTFromRootAsC(file, root->next, follow_next);
+        }
+    }
+}
+
+void
+DataDeskFWriteStructAsC(FILE *file, DataDeskStruct struct_info)
+{
+    DataDeskFWriteASTFromRootAsC(file, struct_info.root, 0);
+}
+#endif
 
 #endif // DATA_DESK_H_INCLUDED_

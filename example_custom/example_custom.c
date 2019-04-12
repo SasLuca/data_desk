@@ -3,10 +3,12 @@
 #include <string.h>
 #include "data_desk.h"
 
+static FILE *global_generation_file = 0;
+
 void
 DataDeskCustomInitCallback(void)
 {
-    
+    global_generation_file = fopen("generated.c", "w");
 }
 
 void
@@ -16,9 +18,14 @@ DataDeskCustomFileCallback(char *filename)
 void
 DataDeskCustomStructCallback(DataDeskStruct struct_info, char *filename)
 {
+    
+    
     if(DataDeskStructHasTag(struct_info, "Printable"))
     {
-        FILE *file = stdout;
+        FILE *file = global_generation_file;
+        
+        DataDeskFWriteStructAsC(file, struct_info);
+        
         DataDeskASTNode *root = struct_info.root;
         fprintf(file, "void\n");
         fprintf(file, "%sPrint(%s *object)\n", struct_info.name, struct_info.name);
