@@ -12,4 +12,4 @@ _AssertFailure(char *condition, int line, char *file, int crash)
     }
 }
 
-#define Log(...) fprintf(stderr, __VA_ARGS__)
+#define Log(...) fprintf(stdout, __VA_ARGS__); fprintf(stdout, "\n")

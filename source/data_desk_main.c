@@ -48,6 +48,8 @@ main(int argument_count, char **arguments)
 {
     if(argument_count > 1)
     {
+        Log("Data Desk v0.1");
+        
         DataDeskCustom custom = {0};
         char *custom_layer_dll_path = 0;
         
@@ -85,11 +87,12 @@ main(int argument_count, char **arguments)
         // NOTE(rjf): Load custom code DLL if needed.
         if(custom_layer_dll_path)
         {
+            Log("Loading custom layer from \"%s\"", custom_layer_dll_path);
             custom = DataDeskCustomLoad(custom_layer_dll_path);
         }
         else
         {
-            fprintf(stdout, "WARNING: No custom layer loaded\n");
+            Log("WARNING: No custom layer loaded");
         }
         
         if(custom.InitCallback)
@@ -102,6 +105,7 @@ main(int argument_count, char **arguments)
             if(arguments[i] != 0)
             {
                 char *filename = arguments[i];
+                Log("Processing file at \"%s\"", filename);
                 char *file = LoadEntireFileAndNullTerminate(filename);
                 if(file)
                 {
@@ -113,7 +117,7 @@ main(int argument_count, char **arguments)
                 }
                 else
                 {
-                    fprintf(stderr, "ERROR: Could not load \"%s\"\n", filename);
+                    Log("ERROR: Could not load \"%s\"", filename);
                 }
             }
         }
