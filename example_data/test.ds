@@ -25,5 +25,17 @@ struct TestStruct
     // NOTE: Individual declarations can also be tagged. The following
     // tag, NoPrint, signifies to the example custom layer that this
     // member is not to be included in the printing function.
-    @NoPrint d: *f32[16];
+    @NoPrint d: *f32[SOME_CONSTANT];
 }
+
+@Shader
+shader : *char = """
+
+#version 330
+
+void main()
+{
+    stuff;
+}
+
+""";

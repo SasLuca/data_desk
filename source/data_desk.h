@@ -89,6 +89,7 @@ typedef struct DataDeskASTNode
         struct Declaration
         {
             DataDeskASTNode *type;
+            DataDeskASTNode *initialization;
         }
         declaration;
         
@@ -193,9 +194,9 @@ DataDeskDeclarationIsType(DataDeskASTNode *root, char *type)
     int matches = pointer_count == root->declaration.type->type_usage.pointer_count;
     if(matches)
     {
-        for(int i = 0; type[i] && root->declaration.type->string[i]; ++i)
+        for(int i = 0; type_name[i] && root->declaration.type->string[i]; ++i)
         {
-            if(type[i] != root->declaration.type->string[i])
+            if(type_name[i] != root->declaration.type->string[i])
             {
                 matches = 0;
                 break;
@@ -231,6 +232,7 @@ DataDeskFWriteASTFromRootAsC(FILE *file, DataDeskASTNode *root, int follow_next)
             
             case DATA_DESK_AST_NODE_TYPE_binary_operator:
             {
+                fprintf(file, "(");
                 DataDeskFWriteASTFromRootAsC(file, root->binary_operator.left, 0);
                 char *binary_operator_string = "";
                 
@@ -245,6 +247,7 @@ DataDeskFWriteASTFromRootAsC(FILE *file, DataDeskASTNode *root, int follow_next)
                 
                 fprintf(file, "%s", binary_operator_string);
                 DataDeskFWriteASTFromRootAsC(file, root->binary_operator.right, 0);
+                fprintf(file, ")");
                 
                 break;
             }

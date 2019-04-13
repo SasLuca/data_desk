@@ -258,6 +258,10 @@ ParseExpression(Tokenizer *tokenizer, ParseContext *context)
     {
         goto end_parse;
     }
+    else if(TokenMatch(token, ";"))
+    {
+        goto end_parse;
+    }
     else if(token.type == TOKEN_symbolic_block)
     {
         int binary_operator_type = GetBinaryOperatorTypeFromToken(token);
@@ -551,6 +555,13 @@ ParseCode(Tokenizer *tokenizer, ParseContext *context)
                     declaration->tag_length = tag.string_length;
                     *node_store_target = declaration;
                     node_store_target = &(*node_store_target)->next;
+                    
+                    // NOTE(rjf): This declaration has an assignment
+                    if(RequireToken(tokenizer, "=", 0))
+                    {
+                        ASTNode *assignment = ParseExpression(tokenizer, context);
+                        declaration->declaration.initialization = assignment;
+                    }
                     
                     if(!RequireToken(tokenizer, ";", 0))
                     {

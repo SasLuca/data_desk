@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 #include "data_desk.h"
 
 static FILE *global_generation_file = 0;
@@ -48,6 +45,10 @@ DataDeskCustomStructCallback(DataDeskStruct struct_info, char *filename)
                 else if(DataDeskStructMemberIsType(member, "f32"))
                 {
                     fprintf(file, "    printf(\"%%f\", object->%s);\n", member->string);
+                }
+                else if(DataDeskStructMemberIsType(member, "*char"))
+                {
+                    fprintf(file, "    printf(\"%%s\", object->%s);\n", member->string);
                 }
             }
         }
