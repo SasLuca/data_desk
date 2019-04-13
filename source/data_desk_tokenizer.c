@@ -110,8 +110,7 @@ GetNextTokenFromBuffer(Tokenizer *tokenizer)
                     // NOTE(rjf): Multiline string constant
                     if(buffer[i+1] == '"' && buffer[i+2] == '"')
                     {
-                        i += 3;
-                        for(j = i+1; buffer[j]; ++j)
+                        for(j = i+3; buffer[j]; ++j)
                         {
                             if(buffer[j] == '\n')
                             {
@@ -120,6 +119,7 @@ GetNextTokenFromBuffer(Tokenizer *tokenizer)
                             
                             if(buffer[j] == '"' && buffer[j+1] == '"' && buffer[j+2] == '"')
                             {
+                                j += 3;
                                 break;
                             }
                         }
@@ -128,7 +128,6 @@ GetNextTokenFromBuffer(Tokenizer *tokenizer)
                     // NOTE(rjf): Single line string constant
                     else
                     {
-                        ++i;
                         for(j = i+1; buffer[j]; ++j)
                         {
                             if(buffer[j] == '\n')
@@ -148,7 +147,6 @@ GetNextTokenFromBuffer(Tokenizer *tokenizer)
                 // NOTE(rjf): Char constant
                 else if(buffer[i] == '\'')
                 {
-                    ++i;
                     for(j = i+1; buffer[j]; ++j)
                     {
                         if(buffer[j] == '\'')

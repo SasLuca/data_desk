@@ -16,7 +16,6 @@ void
 DataDeskCustomStructCallback(DataDeskStruct struct_info, char *filename)
 {
     
-    
     if(DataDeskStructHasTag(struct_info, "Printable"))
     {
         FILE *file = global_generation_file;
@@ -55,10 +54,42 @@ DataDeskCustomStructCallback(DataDeskStruct struct_info, char *filename)
         
         fprintf(file, "}\n\n");
     }
+    
 }
 
 void
 DataDeskCustomDeclarationCallback(DataDeskDeclaration declaration_info, char *filename)
 {
-    
+    if(DataDeskDeclarationHasTag(declaration_info, "Shader"))
+    {
+        FILE *file = global_generation_file;
+        
+        fprintf(file, "static const char *%s = \"\"\n", declaration_info.name);
+        
+        char *shader_string = declaration_info.root->declaration.initialization->string;
+        int shader_string_length = declaration_info.root->declaration.initialization->string_length;
+        if(shader_string && shader_string_length > 3)
+        {
+            fprintf(file, "\"");
+            for(int i = 3; shader_string[i]; ++i)
+            {
+                if(shader_string[i] == '"' && shader_string[i+1] == '"' &&
+                   shader_string[i+2] == '"')
+                {
+                    break;
+                }
+                else if(shader_string[i] == '\n')
+                {
+                    fprintf(file, "\\n\"\n\"");
+                }
+                else
+                {
+                    fprintf(file, "%c", shader_string[i]);
+                }
+            }
+            fprintf(file, "\"");
+        }
+        
+        fprintf(file, ";\n\n");
+    }
 }
