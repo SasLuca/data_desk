@@ -31,7 +31,6 @@ ProcessFile(DataDeskCustom custom, char *file, char *filename)
     
     ASTNode *root = ParseCode(&tokenizer, &context);
     GenerateNullTerminatedStringsForAST(&context, root);
-    // PrintAST(root);
     TraverseASTAndCallCustomParseCallbacks(&context, root, custom, filename);
     
     for(int i = 0; i < context.error_stack_size; ++i)
@@ -93,9 +92,9 @@ main(int argument_count, char **arguments)
             fprintf(stdout, "WARNING: No custom layer loaded\n");
         }
         
-        if(custom.init_callback)
+        if(custom.InitCallback)
         {
-            custom.init_callback();
+            custom.InitCallback();
         }
         
         for(int i = 1; i < argument_count; ++i)
@@ -106,9 +105,9 @@ main(int argument_count, char **arguments)
                 char *file = LoadEntireFileAndNullTerminate(filename);
                 if(file)
                 {
-                    if(custom.file_callback)
+                    if(custom.FileCallback)
                     {
-                        custom.file_callback(filename);
+                        custom.FileCallback(filename);
                     }
                     ProcessFile(custom, file, filename);
                 }
@@ -117,6 +116,11 @@ main(int argument_count, char **arguments)
                     fprintf(stderr, "ERROR: Could not load \"%s\"\n", filename);
                 }
             }
+        }
+        
+        if(custom.CleanUpCallback)
+        {
+            custom.CleanUpCallback();
         }
         
         DataDeskCustomUnload(&custom);

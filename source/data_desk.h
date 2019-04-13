@@ -35,6 +35,7 @@ typedef void DataDeskInitCallback(void);
 typedef void DataDeskFileCallback(char *filename);
 typedef void DataDeskStructCallback(DataDeskStruct parsed_struct, char *filename);
 typedef void DataDeskDeclarationCallback(DataDeskDeclaration declaration, char *filename);
+typedef void DataDeskCleanUpCallback(void);
 
 enum
 {

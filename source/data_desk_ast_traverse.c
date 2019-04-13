@@ -170,7 +170,7 @@ TraverseASTAndCallCustomParseCallbacks(ParseContext *context, ASTNode *root, Dat
             
             case DATA_DESK_AST_NODE_TYPE_struct_declaration:
             {
-                if(custom.struct_callback)
+                if(custom.StructCallback)
                 {
                     DataDeskStruct struct_info = {0};
                     {
@@ -186,7 +186,7 @@ TraverseASTAndCallCustomParseCallbacks(ParseContext *context, ASTNode *root, Dat
                         struct_info.tag = root->tag;
                         struct_info.root = root;
                     }
-                    custom.struct_callback(struct_info, filename);
+                    custom.StructCallback(struct_info, filename);
                 }
                 
                 TraverseASTAndCallCustomParseCallbacks(context, root->struct_declaration.first_member, custom, filename);
@@ -195,7 +195,7 @@ TraverseASTAndCallCustomParseCallbacks(ParseContext *context, ASTNode *root, Dat
             
             case DATA_DESK_AST_NODE_TYPE_declaration:
             {
-                if(custom.declaration_callback)
+                if(custom.DeclarationCallback)
                 {
                     DataDeskDeclaration decl_info = {0};
                     {
@@ -211,7 +211,7 @@ TraverseASTAndCallCustomParseCallbacks(ParseContext *context, ASTNode *root, Dat
                         decl_info.tag = root->tag;
                         decl_info.root = root;
                     }
-                    custom.declaration_callback(decl_info, filename);
+                    custom.DeclarationCallback(decl_info, filename);
                 }
                 
                 TraverseASTAndCallCustomParseCallbacks(context, root->declaration.type, custom, filename);
