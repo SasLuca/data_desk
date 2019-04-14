@@ -12,4 +12,5 @@ _AssertFailure(char *condition, int line, char *file, int crash)
     }
 }
 
-#define Log(...) fprintf(stdout, __VA_ARGS__); fprintf(stdout, "\n")
+static int global_log_enabled = 0;
+#define Log(...) if(global_log_enabled) { fprintf(stdout, __VA_ARGS__); fprintf(stdout, "\n"); }

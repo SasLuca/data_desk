@@ -74,6 +74,12 @@ main(int argument_count, char **arguments)
                         argument_read_mode = ARGUMENT_READ_MODE_custom_layer_dll;
                         arguments[i] = 0;
                     }
+                    else if(StringMatchCaseInsensitive(arguments[i], "-l") ||
+                            StringMatchCaseInsensitive(arguments[i], "--log"))
+                    {
+                        global_log_enabled = 1;
+                        arguments[i] = 0;
+                    }
                 }
                 else if(argument_read_mode == ARGUMENT_READ_MODE_custom_layer_dll)
                 {
@@ -131,7 +137,7 @@ main(int argument_count, char **arguments)
     }
     else
     {
-        fprintf(stderr, "USAGE: %s [-c|--custom <path to custom layer DLL>] <files to process>\n",
+        fprintf(stderr, "USAGE: %s [-c|--custom <path to custom layer DLL>] [-l|--log] <files to process>\n",
                 arguments[0]);
     }
     
