@@ -160,14 +160,23 @@ GetNextTokenFromBuffer(Tokenizer *tokenizer)
                 // NOTE(rjf): Tag block
                 else if(buffer[i] == '@')
                 {
+                    int paren_level = 0;
                     for(j = i+1; buffer[j]; ++j)
                     {
                         if(buffer[j] == '\n')
                         {
                             ++tokenizer->line;
                         }
+                        else if(buffer[j] == '(')
+                        {
+                            ++paren_level;
+                        }
+                        else if(buffer[j] == ')')
+                        {
+                            --paren_level;
+                        }
                         
-                        if(buffer[j] <= 32)
+                        if(!paren_level && buffer[j] <= 32)
                         {
                             break;
                         }
