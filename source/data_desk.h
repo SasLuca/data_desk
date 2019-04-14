@@ -149,6 +149,11 @@ DataDeskTagHasSubString(char *tag, char *substring)
                     ++substring_i;
                 }
             }
+            
+            if(matches)
+            {
+                break;
+            }
         }
     }
     
