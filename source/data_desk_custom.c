@@ -31,7 +31,7 @@ DataDeskCustomLoad(char *custom_dll_path)
         custom.CleanUpCallback = (void *)GetProcAddress(custom.custom_dll, "DataDeskCustomCleanUpCallback");
     }
 #elif BUILD_LINUX
-    custom.custom_dll = dlopen(custom_dll_path);
+    custom.custom_dll = dlopen(custom_dll_path, RTLD_NOW);
     if(custom.custom_dll)
     {
         custom.InitCallback = dlsym(custom.custom_dll, "DataDeskCustomInitCallback");
