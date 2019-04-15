@@ -18,27 +18,17 @@
 // type with a number of *'s, e.g.: array : *i32[5];.
 struct TestStruct
 {
-    a : i32;
-    b : f32;
-    c : char;
+    test_integer_1 : int;
+    test_float_1   : float;
+    test_char_1    : char;
     
-    a1 : i32;
-    a2 : i32;
-    a3 : i32;
-    a4 : i32;
+    test_integer_2 : int;
+    test_float_2   : float;
+    test_char_2    : char;
     
     // NOTE: Individual declarations can also be tagged. The following
     // tag, NoPrint, signifies to the example custom layer that this
     // member is not to be included in the printing function.
-    @NoPrint d: *f32[SOME_CONSTANT];
+    @NoPrint
+        d : *double;
 }
-
-@Shader
-shader : *char = """
-#version 330
-
-void main()
-{
-    stuff;
-}
-""";

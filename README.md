@@ -16,4 +16,30 @@ Data Desk also offers a number of utility functions for introspecting on abstrac
 
 ## Usage
 
-Coming soon, but you can probably get the idea from the examples, located in the example folders.
+To use Data Desk, you'll need to do a few things:
+
+1. Get Data Desk
+2. Make or get some Data Desk format files (.ds)
+3. Make a project-specific custom layer
+
+### Step 1: Get Data Desk
+
+1. Run the command `git clone https://github.com/ryanfleury/data_desk`
+2. `cd data_desk`
+3. `build` on Windows (Linux builds not yet officially supported, but the build is extremely simple, so if you take a look at `build.bat` you can create a Linux equivalent very easily).
+
+### Step 2: Make or get Data Desk format files (.ds)
+
+Grab an (example)[https://github.com/ryanfleury/data_desk/blob/master/example_data/test.ds] or make your own.
+
+### Step 3: Make a project-specific custom layer
+
+1. An easy way to write the code for this is to check out the custom layer template, located here. Fill out the functions in your custom layer code however you want to. There are some helper functions available in `data_desk.h` that might be useful for you here. This can be dropped into your code and used.
+
+2. To build a custom layer, you just need to build a DLL with the function callbacks you've written as the appropriate exported symbols. `data_desk.h` outlines what symbols are used for each callback.
+
+### Step 4: Run Data Desk
+
+To run Data Desk with your custom layer, you can use the following command template:
+
+`data_desk --custom /path/to/custom/layer /file/to/parse/1 /file/to/parse/2 ...`

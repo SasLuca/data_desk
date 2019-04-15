@@ -1,2 +1,2 @@
 @echo off
-cl -nologo /Zi -I ..\source\ example_custom.c /LD /link /export:DataDeskCustomInitCallback /export:DataDeskCustomFileCallback /export:DataDeskCustomStructCallback /export:DataDeskCustomDeclarationCallback
+cl -nologo /Zi -I ..\source\ example_custom.c /LD

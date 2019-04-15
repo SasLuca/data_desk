@@ -5,6 +5,36 @@
 #include <stdio.h>
 #endif
 
+#if defined(_MSC_VER)
+#define DATA_DESK_EXPORT __declspec(dllexport)
+#else
+#define DATA_DESK_EXPORT
+#endif
+
+#if defined(__cplusplus)
+#define DATA_DESK_EXTERN_C extern "C"
+#else
+#define DATA_DESK_EXTERN_C
+#endif
+
+#define DATA_DESK_FUNC DATA_DESK_EXPORT DATA_DESK_EXTERN_C
+
+
+
+
+
+/*
+| /////////////////////////////////////////////////////////////////
+ |  Callback Structs/Functions
+ | /////////////////////////////////////////////////////////////////
+ |
+ | These are structures and function typedefs that correspond to
+ | the callbacks that a custom layer can receive. A custom layer
+ | doesn't need to define every possible callback. The symbol
+ | names that Data Desk expects for each callback are listed
+ | next to the corresponding function typedef.
+ */
+
 typedef struct DataDeskASTNode DataDeskASTNode;
 
 typedef struct DataDeskStruct
@@ -31,11 +61,37 @@ typedef struct DataDeskDeclaration
 }
 DataDeskDeclaration;
 
+/* DataDeskCustomInitCallback */
 typedef void DataDeskInitCallback(void);
+
+/* DataDeskCustomFileCallback */
 typedef void DataDeskFileCallback(char *filename);
+
+/* DataDeskCustomStructCallback */
 typedef void DataDeskStructCallback(DataDeskStruct parsed_struct, char *filename);
+
+/* DataDeskCustomDeclarationCallback */
 typedef void DataDeskDeclarationCallback(DataDeskDeclaration declaration, char *filename);
+
+/* DataDeskCustomCleanUpCallback */
 typedef void DataDeskCleanUpCallback(void);
+
+
+
+
+
+/*
+| /////////////////////////////////////////////////////////////////
+ |  Abstract Syntax Tree Representation
+ | /////////////////////////////////////////////////////////////////
+ |
+ | The following code outlines the general structure for the
+ | abstract syntax trees that Data Desk generates. Each sub-struct
+ | contained inside of the DataDeskASTNode struct is only safe to
+ | access if the "int type" variable in the struct is set to the
+ | corresponding type value. All of the type constants are defined
+ | in the following enum.
+ */
 
 enum
 {
@@ -105,6 +161,20 @@ typedef struct DataDeskASTNode
 }
 DataDeskASTNode;
 
+
+
+
+
+/*
+| /////////////////////////////////////////////////////////////////
+ |  Introspection Helper Functions
+ | /////////////////////////////////////////////////////////////////
+ |
+ | The following function prototypes are convenience utility
+ | functions that can be helpful when introspecting upon abstract
+ | syntax trees.
+ */
+
 int DataDeskTagHasSubString(char *tag, char *substring);
 int DataDeskStructHasTag(DataDeskStruct struct_info, char *tag);
 int DataDeskNodeHasTag(DataDeskASTNode *root, char *tag);
@@ -116,6 +186,16 @@ int DataDeskStructMemberIsType(DataDeskASTNode *root, char *type);
 #ifndef DATA_DESK_NO_CRT
 void DataDeskFWriteStructAsC(FILE *file, DataDeskStruct struct_info);
 #endif
+
+
+
+
+
+/*
+| /////////////////////////////////////////////////////////////////
+ |  Helper Function Implementation Code
+ | /////////////////////////////////////////////////////////////////
+ */
 
 int
 DataDeskTagHasSubString(char *tag, char *substring)
@@ -315,6 +395,6 @@ DataDeskFWriteStructAsC(FILE *file, DataDeskStruct struct_info)
 {
     DataDeskFWriteASTFromRootAsC(file, struct_info.root, 0);
 }
-#endif
+#endif // DATA_DESK_NO_CRT
 
 #endif // DATA_DESK_H_INCLUDED_
