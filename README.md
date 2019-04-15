@@ -30,11 +30,11 @@ To use Data Desk, you'll need to do a few things:
 
 ### Step 2: Make or get Data Desk format files (.ds)
 
-Grab an (example)[https://github.com/ryanfleury/data_desk/blob/master/example_data/test.ds] or make your own.
+Grab an [example](https://github.com/ryanfleury/data_desk/blob/master/example_data/test.ds) or make your own.
 
 ### Step 3: Make a project-specific custom layer
 
-1. An easy way to write the code for this is to check out the custom layer template, located here. Fill out the functions in your custom layer code however you want to. There are some helper functions available in `data_desk.h` that might be useful for you here. This can be dropped into your code and used.
+1. An easy way to write the code for this is to check out the custom layer template, located [here](https://github.com/ryanfleury/data_desk/blob/master/example_custom/custom_template.c). Fill out the functions in your custom layer code however you want to. There are some helper functions available in `data_desk.h` that might be useful for you here. This can be dropped into your code and used.
 
 2. To build a custom layer, you just need to build a DLL with the function callbacks you've written as the appropriate exported symbols. `data_desk.h` outlines what symbols are used for each callback.
 
