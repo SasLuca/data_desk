@@ -9,6 +9,7 @@
 // NOTE(rjf): C Runtime Library
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 // NOTE(rjf): Data Desk Code
 #include "data_desk.h"
