@@ -8,6 +8,8 @@ typedef struct DataDeskCustom
     
 #if BUILD_WIN32
     HANDLE custom_dll;
+#elif BUILD_LINUX
+    void *custom_dll;
 #endif
     
 }
@@ -28,6 +30,16 @@ DataDeskCustomLoad(char *custom_dll_path)
         custom.DeclarationCallback = (void *)GetProcAddress(custom.custom_dll, "DataDeskCustomDeclarationCallback");
         custom.CleanUpCallback = (void *)GetProcAddress(custom.custom_dll, "DataDeskCustomCleanUpCallback");
     }
+#elif BUILD_LINUX
+    custom.custom_dll = dlopen(custom_dll_path);
+    if(custom.custom_dll)
+    {
+        custom.InitCallback = dlsym(custom.custom_dll, "DataDeskCustomInitCallback");
+        custom.FileCallback = dlsym(custom.custom_dll, "DataDeskCustomFileCallback");
+        custom.StructCallback = dlsym(custom.custom_dll, "DataDeskCustomStructCallback");
+        custom.DeclarationCallback = dlsym(custom.custom_dll, "DataDeskCustomDeclarationCallback");
+        custom.CleanUpCallback = dlsym(custom.custom_dll, "DataDeskCustomCleanUpCallback");
+    }
 #endif
     
     if(!custom.InitCallback && !custom.FileCallback &&
@@ -46,6 +58,8 @@ DataDeskCustomUnload(DataDeskCustom *custom)
     
 #if BUILD_WIN32
     FreeLibrary(custom->custom_dll);
+#elif BUILD_LINUX
+    dlclose(custom->custom_dll);
 #endif
     
     custom->InitCallback = 0;
