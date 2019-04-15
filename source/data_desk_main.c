@@ -2,6 +2,8 @@
 #if BUILD_WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#elif BUILD_LINUX
+#include <dlfcn.h>
 #endif
 
 // NOTE(rjf): C Runtime Library
