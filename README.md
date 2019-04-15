@@ -28,6 +28,8 @@ To use Data Desk, you'll need to do a few things:
 2. `cd data_desk`
 3. `build` on Windows (Linux builds not yet officially supported, but the build is extremely simple, so if you take a look at `build.bat` you can create a Linux equivalent very easily).
 
+NOTE: The `build` command on Windows expects to find `cl` (MSVC). Your environment should know about this. The easiest way to do this is to call `vcvarsall.bat` in your terminal environemnt, which is packaged with Visual Studio.
+
 ### Step 2: Make or get Data Desk format files (.ds)
 
 Grab an [example](https://github.com/ryanfleury/data_desk/blob/master/example_data/test.ds) or make your own.
